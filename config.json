@@ -4,21 +4,35 @@
   "autoCreateDB": true,
   "BOTNAME": "SaGor",
   "PREFIX": ".",
-
-  "ADMINBOT": ["61581197276223"],
-  "NDH": ["61581197276223"],
-
+  "ADMINBOT": [
+    "61581197276223"
+  ],
+  "NDH": [
+    "61581197276223"
+  ],
   "adminOnly": false,
   "ndhOnly": false,
+  "noprefix": true,
   "adminPaOnly": false,
-
   "allowInbox": true,
   "notiGroup": true,
   "NOTIFICATION": true,
-
   "autoClean": true,
-  "commandDisabled": ["sim.js"],
-  "eventDisabled": ["join.js"],
+  "commandDisabled": [
+    "sim.js"
+  ],
+  "eventDisabled": [
+    "join.js"
+  ],
+  "AuthorName": "JAHIDUL ISLAM SAGOR",
+  "AuthorGender": "Male",
+  "AuthorReligion": "Islam",
+  "AuthorReletionalStatus": "Single",
+  "AuthorAge": "18+",
+  "AuthorLocation": "Bangladesh",
+  "AuthorGithub": "https://github.com/SAGOR-KINGx",
+  "AuthorFacebook": "https://www.facebook.com/SAGOR.69x",
+  "AuthorID": "61581197276223",
 
   "DATABASE": {
     "sqlite": {
@@ -60,66 +74,12 @@
     "enable": true
   },
 
-  "menu": {
-    "autoUnsend": true,
-    "delayUnsend": 55
-  },
-
-  "help": {
-    "autoUnsend": true,
-    "delayUnsend": 120
-  },
-
-  "help2": {
-    "autoUnsend": true,
-    "delayUnsend": 300
-  },
-
-  "help3": {
-    "autoUnsend": true,
-    "delayUnsend": 300
-  },
-
-  "rankup": {
-    "autoUnsend": true,
-    "unsendMessageAfter": 10
-  },
-
-  "daily": {
-    "cooldownTime": 43200000,
-    "rewardCoin": 1000
-  },
-
   "work": {
     "cooldownTime": 1200000
   },
 
   "job": {
     "cooldownTime": 5000
-  },
-
-  "fish": {
-    "cooldownTime": 1000000
-  },
-
-  "anime": {
-    "cooldownTime": 1200000
-  },
-
-  "cave": {
-    "cooldownTime": 2000000
-  },
-
-  "cavevip": {
-    "cooldownTime": 1200000
-  },
-
-  "lixi": {
-    "cooldownTime": 1100000
-  },
-
-  "lamviec": {
-    "cooldownTime": 1200000
   },
 
   "xidach": {
