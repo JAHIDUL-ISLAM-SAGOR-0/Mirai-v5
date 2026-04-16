@@ -3,7 +3,7 @@ module.exports = function ({ api, models }) {
     const path = require("path");
     const moment = require("moment-timezone");
 
-    // Import controllers
+    // Import controller
     const Users = require("./controllers/users")({ models, api });
     const Threads = require("./controllers/threads")({ models, api });
     const Currencies = require("./controllers/currencies")({ models });
