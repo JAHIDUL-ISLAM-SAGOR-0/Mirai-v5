@@ -2,7 +2,7 @@
   "language": "en",
   "DeveloperMode": false,
   "autoCreateDB": true,
-  "BOTNAME": "SaGor",
+  "BOTNAME": "Sagor bot v5",
   "PREFIX": ".",
   "ADMINBOT": [
     "61581197276223"
@@ -19,10 +19,10 @@
   "NOTIFICATION": true,
   "autoClean": true,
   "commandDisabled": [
-    "sim.js"
+    ""
   ],
   "eventDisabled": [
-    "join.js"
+    ""
   ],
   "AuthorName": "JAHIDUL ISLAM SAGOR",
   "AuthorGender": "Male",
@@ -33,7 +33,7 @@
   "AuthorGithub": "https://github.com/SAGOR-KINGx",
   "AuthorFacebook": "https://www.facebook.com/SAGOR.69x",
   "AuthorID": "61581197276223",
-
+  
   "DATABASE": {
     "sqlite": {
       "storage": "data.sqlite"
@@ -68,7 +68,7 @@
     "maxMessagesPerDay": 24
   },
 
-  "version": "1.2.14",
+  "version": "5.0.0",
 
   "log": {
     "enable": true
