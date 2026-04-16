@@ -12,7 +12,6 @@
   ],
   "adminOnly": false,
   "ndhOnly": false,
-  "noprefix": true,
   "adminPaOnly": false,
   "allowInbox": true,
   "notiGroup": true,
