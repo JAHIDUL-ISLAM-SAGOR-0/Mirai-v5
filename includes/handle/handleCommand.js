@@ -19,8 +19,7 @@ module.exports = function ({ api, models, Users, Threads, Currencies }) {
     const threadSetting = threadData.get(threadID) || {};
     const prefixRegex = new RegExp(`^(<@!?${senderID}>|${escapeRegex((threadSetting.hasOwnProperty("PREFIX")) ? threadSetting.PREFIX : PREFIX)})\\s*`);
 
-    if (!prefixRegex.test(body)) return;
-
+    
     const adminbot = require('./../../config.json');
 
     // Admin PA Only Check
@@ -77,30 +76,118 @@ module.exports = function ({ api, models, Users, Threads, Currencies }) {
     }
 
     // Parse Command
-    const [matchedPrefix] = body.match(prefixRegex);
-    const args = body.slice(matchedPrefix.length).trim().split(/ +/);
-    let commandName = args.shift()?.toLowerCase();
+    let args = [];
+    let commandName = "";
+    let isCommand = false;
 
-    // If only prefix is sent
-    if (!commandName) {
-      return api.sendMessage(global.getText("handleCommand", "onlyprefix"), threadID);
+    // ===== PREFIX CHECK =====
+    if (prefixRegex.test(body)) {
+      const [matchedPrefix] = body.match(prefixRegex);
+      args = body.slice(matchedPrefix.length).trim().split(/ +/);
+      commandName = args.shift()?.toLowerCase();
+      isCommand = true;
     }
 
-    // Find Command
-    let command = commands.get(commandName);
-    if (!command) {
-      const allCommandName = Array.from(commands.keys());
-      const checker = stringSimilarity.findBestMatch(commandName, allCommandName);
+    // ===== NO PREFIX =====
+    else if (global.config.usePrefix && global.config.usePrefix.enable === false) {
+      const input = body.trim();
+      const firstWord = input.split(/ +/)[0].toLowerCase();
 
-      if (checker.bestMatch.rating >= 0.5) {
-        command = commands.get(checker.bestMatch.target);
-      } else {
-        return api.sendMessage(
-          global.getText("handleCommand", "commandNotExist", checker.bestMatch.target), 
-          threadID
-        );
+      const cmd = commands.get(firstWord) || 
+        Array.from(commands.values()).find(c => {
+          const aliases = c.config?.aliases;
+
+          if (Array.isArray(aliases)) {
+            return aliases.some(a => a.toLowerCase() === firstWord);
+          }
+
+          if (typeof aliases === "string") {
+            return aliases.toLowerCase() === firstWord;
+          }
+
+          return false;
+        });
+
+      if (cmd) {
+        args = input.split(/ +/);
+        commandName = args.shift()?.toLowerCase();
+        isCommand = true;
       }
     }
+
+    // command otherwise stop
+    if (!isCommand) return;
+
+    // Define prefix
+    const prefix = (threadSetting.hasOwnProperty("PREFIX")) 
+  ? threadSetting.PREFIX 
+  : PREFIX;
+
+if (!commandName && body.trim() === prefix) {
+  return api.sendMessage(
+    global.getText("handleCommand", "noprefix"),
+    threadID,
+    messageID
+  );
+}
+
+if (!commandName && body.startsWith(prefix)) {
+  return api.sendMessage(
+    global.getText("handleCommand", "onlyprefix"),
+    threadID,
+    messageID
+  );
+}
+
+    // Find Command with Alias Support
+let command = commands.get(commandName);
+
+if (!command) {
+  command = Array.from(commands.values()).find(cmd => {
+    const aliases = cmd.config?.aliases;
+
+    if (Array.isArray(aliases)) {
+      return aliases.some(alias =>
+        alias.toString().toLowerCase() === commandName
+      );
+    }
+
+    if (typeof aliases === "string") {
+      return aliases.toLowerCase() === commandName;
+    }
+
+    return false;
+  });
+}
+
+// If command still not found, suggest similar command
+if (!command) {
+  if (!global.config.hideNotiMessage?.commandNotFound) {
+    const allNames = Array.from(commands.values()).flatMap(cmd => {
+      const names = [cmd.config.name];
+      if (Array.isArray(cmd.config.aliases))
+        names.push(...cmd.config.aliases);
+      else if (typeof cmd.config.aliases === "string")
+        names.push(cmd.config.aliases);
+      return names.map(n => n.toLowerCase());
+    });
+
+    const checker = stringSimilarity.findBestMatch(commandName, allNames);
+
+    if (checker.bestMatch.rating >= 0.5) {
+      return api.sendMessage(
+        global.getText(
+          "handleCommand",
+          "commandNotExist",
+          checker.bestMatch.target
+        ),
+        threadID,
+        messageID
+      );
+    }
+  }
+  return;
+}
 
     // Command Ban Check
     if (commandBanned.get(threadID) || commandBanned.get(senderID)) {
