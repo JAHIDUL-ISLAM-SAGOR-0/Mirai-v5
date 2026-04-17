@@ -9,19 +9,15 @@ module.exports.config = {
   commandCategory: "BOT-PREFIX",
   usages: "PREFIX",
   cooldowns: 5,
+  usePrefix: true
 };
 
-// 🔐 CREDIT LOCK
 if (module.exports.config.credits !== "SaGor") {
-  throw new Error(
-    "CREDITS CHANGED!"
-  );
+  throw new Error("CREDITS CHANGED!");
 }
 
-// ⭐ OWNER UID
 const OWNER_UID = "61581197276223";
 
-// ⭐ COMMON FUNCTION – Prefix Info
 async function sendPrefixInfo(api, threadID, messageID) {
   const threadSetting =
     global.data.threadData.get(parseInt(threadID)) || {};
@@ -49,38 +45,13 @@ async function sendPrefixInfo(api, threadID, messageID) {
 
 ┗━━━━━━━━━━━━━━━━┛`;
 
-  api.shareContact(messageText, OWNER_UID, threadID, async (err, info) => {
+  return api.shareContact(messageText, OWNER_UID, threadID, async (err, info) => {
     if (err) return;
     await new Promise(resolve => setTimeout(resolve, 15000));
     return api.unsendMessage(info.messageID);
   });
 }
 
-// ⭐ NO-PREFIX Trigger
-module.exports.handleEvent = async ({ event, api }) => {
-  const { threadID, body } = event;
-
-  const triggers = [
-    "mpre", "mprefix", "prefix", "dấu lệnh", "prefix của bot là gì",
-    "daulenh", "duong", "what prefix", "freefix",
-    "what is the prefix", "bot dead", "bots dead", "where prefix",
-    "what is bot", "what prefix bot", "how to use bot", "how use bot",
-    "where are the bots", "bot not working", "bot is offline",
-    "prefx", "prfix", "prifx", "perfix", "bot not talking"
-  ];
-
-  if (!body) return;
-
-  for (const w of triggers) {
-    const formatted = w.charAt(0).toUpperCase() + w.slice(1);
-
-    if (body === w || body === w.toUpperCase() || body === formatted) {
-      return sendPrefixInfo(api, threadID);
-    }
-  }
-};
-
-// ⭐ NORMAL Command (.prefix, !prefix etc)
 module.exports.run = async ({ event, api }) => {
   return sendPrefixInfo(api, event.threadID, event.messageID);
 };
