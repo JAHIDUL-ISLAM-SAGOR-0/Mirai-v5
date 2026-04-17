@@ -60,6 +60,9 @@
   "usePrefix": {
   "enable": false
   },
+  "hideNotiMessage": {
+  "commandNotFound": false
+  },
   "reactBy": {
     "delete": [
       "😠",
