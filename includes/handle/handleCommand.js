@@ -115,7 +115,7 @@ module.exports = function ({ api, models, Users, Threads, Currencies }) {
       }
     }
 
-    // command otherwise stop
+    // command না হলে stop
     if (!isCommand) return;
 
     // Define prefix
@@ -185,10 +185,19 @@ if (!command) {
         messageID
       );
     }
+
+    return api.sendMessage(
+      global.getText(
+        "handleCommand",
+        "commandNotFound",
+        commandName
+      ),
+      threadID,
+      messageID
+    );
   }
   return;
 }
-
     // Command Ban Check
     if (commandBanned.get(threadID) || commandBanned.get(senderID)) {
       if (!ADMINBOT.includes(senderID)) {
