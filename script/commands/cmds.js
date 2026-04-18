@@ -9,7 +9,7 @@ module.exports.config = {
   name: "cmd",
   version: "3.0.0",
   hasPermssion: 2,
-  credits: "MAHBUB ULLASH",
+  credits: "ULLASH & SAGOR",
   description: "Command Manager (Install/Load/Unload)",
   commandCategory: "System",
   usages: "[load/unload/loadAll/unloadAll/install/del/info/count]",
