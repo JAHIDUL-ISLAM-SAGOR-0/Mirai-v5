@@ -1,24 +1,59 @@
-const fs = require("fs");
+const fs = require("fs-extra");
+
 module.exports.config = {
-	name: "gali",
-    version: "1.0.1",
-	hasPermssion: 0,
-	credits: "SaGor", 
-	description: "no prefix",
-	commandCategory: "no prefix",
-	usages: "abal",
-    cooldowns: 5, 
+ name: "wl",
+ version: "1.0.0",
+ hasPermssion: 3,
+ credits: "SaGor",
+ description: "Whitelist mode on/off",
+ commandCategory: "Admin",
+ usages: "wl on / wl off",
+ cooldowns: 3
 };
 
-module.exports.handleEvent = function({ api, event, client, __GLOBAL }) {
-	var { threadID, messageID } = event;
-	if (event.body.indexOf("fuck")==0 || event.body.indexOf("mc")==0 || event.body.indexOf("chod")==0 || event.body.indexOf("bal")==0 || event.body.indexOf("bc")==0 || event.body.indexOf("maa ki chut")==0 || event.body.indexOf("xod")==0 || event.body.indexOf("behen chod")==0 || event.body.indexOf("🖕")==0 || event.body.indexOf("madarchod")==0 || event.body.indexOf("chudi")==0 || event.body.indexOf("gala gali")==0) {
-		var msg = {
-				body: "(এখানে গালাগালি করিস না 😾)",
-			}
-			api.sendMessage(msg, threadID, messageID);
-		}
-	}
-	module.exports.run = function({ api, event, client, __GLOBAL }) {
+module.exports.run = async function ({ api, event, args }) {
+ const { threadID, messageID } = event;
+ const configPath = global.client.configPath;
 
-  }
+ delete require.cache[require.resolve(configPath)];
+ const config = require(configPath);
+
+ if (!args[0]) {
+ return api.sendMessage(
+ "Example:\nwl on\nwl off",
+ threadID,
+ messageID
+ );
+ }
+
+ const option = args[0].toLowerCase();
+
+ if (option === "on") {
+ config.adminOnly = true;
+ } else if (option === "off") {
+ config.adminOnly = false;
+ } else {
+ return api.sendMessage(
+ "Example:\nwl on\nwl off",
+ threadID,
+ messageID
+ );
+ }
+
+ fs.writeFileSync(configPath, JSON.stringify(config, null, 4));
+
+ global.config.adminOnly = !!config.adminOnly;
+ global.config.ADMINBOT = Array.isArray(config.ADMINBOT) ? config.ADMINBOT.map(String) : [];
+ global.config.NDH = Array.isArray(config.NDH) ? config.NDH.map(String) : [];
+ global.config.adminPaOnly = !!config.adminPaOnly;
+ global.config.ndhOnly = !!config.ndhOnly;
+ global.config.keyAdminOnly = !!config.keyAdminOnly;
+
+ return api.sendMessage(
+ config.adminOnly
+ ? "enabled"
+ : "disabled",
+ threadID,
+ messageID
+ );
+};
