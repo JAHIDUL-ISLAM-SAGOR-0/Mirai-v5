@@ -7,7 +7,7 @@ module.exports = function ({ api, models, Users, Threads, Currencies }) {
 
   return async function ({ event }) {
     const dateNow = Date.now();
-    const time = moment.tz("Asia/Dhaka").format("HH:MM:ss DD/MM/YYYY");
+    const time = moment.tz("Asia/Dhaka").format("HH:mm:ss DD/MM/YYYY");
     const { allowInbox, PREFIX, ADMINBOT, NDH, DeveloperMode, adminOnly, keyAdminOnly, ndhOnly, adminPaOnly } = global.config;
     const { userBanned, threadBanned, threadInfo, threadData, commandBanned } = global.data;
     const { commands, cooldowns } = global.client;
@@ -24,17 +24,17 @@ module.exports = function ({ api, models, Users, Threads, Currencies }) {
 
     // Admin PA Only Check
     if (!global.data.allThreadID.includes(threadID) && !ADMINBOT.includes(senderID) && adminbot.adminPaOnly === true) {
-      return api.sendMessage("❌ MODE » Only admins can use bots in their own inbox", threadID, messageID);
+      return;
     }
 
     // Admin Only Check
     if (!ADMINBOT.includes(senderID) && adminbot.adminOnly === true) {
-      return api.sendMessage('❌ MODE » Only admins can use bots', threadID, messageID);
+      return;
     }
 
     // NDH Only Check
     if (!NDH.includes(senderID) && !ADMINBOT.includes(senderID) && adminbot.ndhOnly === true) {
-      return api.sendMessage('❌ MODE » Only bot support can use bots', threadID, messageID);
+      return;
     }
 
     // Admin Box Check
